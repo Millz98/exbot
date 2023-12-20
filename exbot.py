@@ -21,7 +21,7 @@ bot = commands.Bot(command_prefix='!', intents=intents)
 async def on_ready():
     print(f'Logged in as {bot.user.name} ({bot.user.id})')
 
-# Example command
+# Commands below
 @bot.command(name='hello')
 async def hello(ctx):
     print(f"Command invoked by: {ctx.author.name} ({ctx.author.id})")
