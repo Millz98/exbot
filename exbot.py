@@ -1,5 +1,11 @@
 import discord
+import os
 from discord.ext import commands
+from dotenv import load_dotenv
+
+load_dotenv()  # Load environment variables from .env file
+
+DISCORD_BOT_TOKEN = os.getenv("DISCORD_BOT_TOKEN")
 
 # Define intents
 intents = discord.Intents.default()
@@ -37,4 +43,4 @@ async def on_message(message):
 
 
 # Run the bot
-bot.run('MTE4NjIzOTI4MDg1OTg0MDU2Mg.GkLW5h.hbehXADxb_ez16e25Sn_DkHbyUS9T46WR_OGSw')
+bot.run(DISCORD_BOT_TOKEN)
