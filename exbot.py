@@ -198,7 +198,7 @@ async def wikipedia(ctx, *, query):
     print(f"Command invoked by: {ctx.author.name} ({ctx.author.id})")
 
     # Set a custom user agent
-    user_agent = 'Exeter/project6six@gmail.com (Discord Bot; YourContactInfo)'
+    user_agent = 'Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/58.0.3029.110 Safari/537.3'
     wiki_wiki = wikipediaapi.Wikipedia('en')
     wiki_wiki.headers = {'User-Agent': user_agent}
 
@@ -208,6 +208,7 @@ async def wikipedia(ctx, *, query):
         await ctx.send(f"**{page_py.title}**\n{summary}")
     else:
         await ctx.send("Sorry, the page does not exist on Wikipedia.")
+
         
 
 
