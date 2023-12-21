@@ -192,26 +192,6 @@ async def ban(ctx, user: discord.Member, *, reason=None):
     else:
         await ctx.send("You don't have permission to ban members.")
         
-# Command: Wikipedia
-@bot.command(name='wikipedia')
-async def wikipedia(ctx, *, query):
-    print(f"Command invoked by: {ctx.author.name} ({ctx.author.id})")
-
-    # Set a custom user agent in the headers
-    headers = {'User-Agent': 'Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/58.0.3029.110 Safari/537.3'}
-    wiki_wiki = wikipediaapi.Wikipedia('en')
-    wiki_wiki.headers = headers
-
-    page_py = wiki_wiki.page(query)
-    if page_py.exists():
-        summary = page_py.text[:2000]  # Limit summary to 2000 characters
-        await ctx.send(f"**{page_py.title}**\n{summary}")
-    else:
-        await ctx.send("Sorry, the page does not exist on Wikipedia.")
-
-        
-
-
 # Event: Process Commands
 @bot.event
 async def on_message(message):
