@@ -21,7 +21,8 @@ bot = commands.Bot(command_prefix='!', intents=intents)
 async def on_ready():
     print(f'Logged in as {bot.user.name} ({bot.user.id})')
 
-# Commands below
+
+# Command: Hello
 @bot.command(name='hello')
 async def hello(ctx):
     print(f"Command invoked by: {ctx.author.name} ({ctx.author.id})")
@@ -34,8 +35,31 @@ async def hello(ctx):
     else:
         await ctx.send("This command can only be used in a server.")
 
+
+# Command: Ping
+@bot.command(name='ping')
+async def ping(ctx):
+    print(f"Command invoked by: {ctx.author.name} ({ctx.author.id})")
+    latency = bot.latency * 1000  # Convert to milliseconds
+    await ctx.send(f'Pong! Latency: {latency:.2f}ms')
+
+
+# Command: Info
+@bot.command(name='info')
+async def info(ctx):
+    print(f"Command invoked by: {ctx.author.name} ({ctx.author.id})")
+    embed = discord.Embed(title="Bot Information", color=0x00ff00)
+    embed.add_field(name="Creator", value="Your Name", inline=False)
+    embed.add_field(name="Version", value="1.0", inline=False)
+    await ctx.send(embed=embed)
+
+
+# Event: Process Commands
 @bot.event
 async def on_message(message):
+    if message.author == bot.user or not message.content.startswith('!'):
+        return  # Ignore messages from the bot and messages without the prefix
+
     print(f"Message received: {message.content}")
 
     # Process commands
