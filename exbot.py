@@ -80,8 +80,8 @@ async def ping(ctx):
 async def info(ctx):
     print(f"Command invoked by: {ctx.author.name} ({ctx.author.id})")
     embed = discord.Embed(title="Bot Information", color=0x00ff00)
-    embed.add_field(name="Creator", value="Your Name", inline=False)
-    embed.add_field(name="Version", value="1.0", inline=False)
+    embed.add_field(name="Creator", value="Millz98", inline=False)
+    embed.add_field(name="Version", value="0.1", inline=False)
     await ctx.send(embed=embed)
 
 
