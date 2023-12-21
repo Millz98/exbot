@@ -13,9 +13,10 @@ DISCORD_BOT_TOKEN = os.getenv("DISCORD_BOT_TOKEN")
 intents = discord.Intents.default()
 intents.messages = True
 intents.guilds = True
-intents.message_content = True  # Enable message content intent
+intents.members = True  # Enable the members intent
 
 bot = commands.Bot(command_prefix='!', intents=intents)
+
 
 
 # Event: Bot is ready
@@ -130,8 +131,12 @@ async def serverinfo(ctx):
     embed.add_field(name="Server ID", value=guild.id, inline=False)
     embed.add_field(name="Members", value=guild.member_count, inline=False)
     embed.add_field(name="Creation Date", value=guild.created_at.strftime('%Y-%m-%d %H:%M:%S'), inline=False)
-    embed.set_thumbnail(url=guild.icon_url)
+    
+    # Use icon.url instead of icon_url
+    embed.set_thumbnail(url=guild.icon.url)
+    
     await ctx.send(embed=embed)
+
 
 
 # Command: User Info
@@ -146,8 +151,12 @@ async def userinfo(ctx, user: discord.Member = None):
     embed.add_field(name="Roles", value=", ".join(role.name for role in user.roles), inline=False)
     embed.add_field(name="Joined Server", value=user.joined_at.strftime('%Y-%m-%d %H:%M:%S'), inline=False)
     embed.add_field(name="Account Created", value=user.created_at.strftime('%Y-%m-%d %H:%M:%S'), inline=False)
-    embed.set_thumbnail(url=user.avatar_url)
+    
+    # Use avatar.url instead of avatar_url
+    embed.set_thumbnail(url=user.avatar.url)
+    
     await ctx.send(embed=embed)
+
 
 
 # Command: Avatar
@@ -184,20 +193,19 @@ async def ban(ctx, user: discord.Member, *, reason=None):
         
 # Command: Wikipedia
 @bot.command(name='wikipedia')
-async def wikipedia(ctx, query):
+async def wikipedia(ctx, *, query):
     print(f"Command invoked by: {ctx.author.name} ({ctx.author.id})")
 
-    wiki_wiki = wikipediaapi.Wikipedia('en')  # You can change the language code if needed
-    page_py = wiki_wiki.page(query)
+    # Set a custom user agent
+    user_agent = 'Exeter/0.1 (Discord Bot; project6six@gmail.com)'
+    wiki_wiki = wikipediaapi.Wikipedia('en', user_agent=user_agent)
 
+    page_py = wiki_wiki.page(query)
     if page_py.exists():
-        # Create and send an embed with Wikipedia information
-        embed = discord.Embed(title=f"{query.capitalize()} on Wikipedia", color=0x00ff00)
-        embed.add_field(name="Summary", value=page_py.text[:500], inline=False)  # Display first 500 characters
-        embed.add_field(name="Link", value=page_py.fullurl, inline=False)
-        await ctx.send(embed=embed)
+        summary = page_py.text[:2000]  # Limit summary to 2000 characters
+        await ctx.send(f"**{page_py.title}**\n{summary}")
     else:
-        await ctx.send(f"No Wikipedia page found for {query}.")        
+        await ctx.send("Sorry, the page does not exist on Wikipedia.")        
 
 
 # Event: Process Commands
