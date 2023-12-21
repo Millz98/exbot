@@ -3,6 +3,7 @@ import os
 import random
 from discord.ext import commands
 from dotenv import load_dotenv
+import wikipediaapi
 
 load_dotenv()  # Load environment variables from .env file
 
@@ -180,6 +181,23 @@ async def ban(ctx, user: discord.Member, *, reason=None):
         await ctx.send(f"{user.name} has been banned.")
     else:
         await ctx.send("You don't have permission to ban members.")
+        
+# Command: Wikipedia
+@bot.command(name='wikipedia')
+async def wikipedia(ctx, query):
+    print(f"Command invoked by: {ctx.author.name} ({ctx.author.id})")
+
+    wiki_wiki = wikipediaapi.Wikipedia('en')  # You can change the language code if needed
+    page_py = wiki_wiki.page(query)
+
+    if page_py.exists():
+        # Create and send an embed with Wikipedia information
+        embed = discord.Embed(title=f"{query.capitalize()} on Wikipedia", color=0x00ff00)
+        embed.add_field(name="Summary", value=page_py.text[:500], inline=False)  # Display first 500 characters
+        embed.add_field(name="Link", value=page_py.fullurl, inline=False)
+        await ctx.send(embed=embed)
+    else:
+        await ctx.send(f"No Wikipedia page found for {query}.")        
 
 
 # Event: Process Commands
