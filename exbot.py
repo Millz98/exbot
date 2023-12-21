@@ -3,7 +3,7 @@ import os
 import random
 from discord.ext import commands
 from dotenv import load_dotenv
-import wikipediaapi
+
 
 load_dotenv()  # Load environment variables from .env file
 
