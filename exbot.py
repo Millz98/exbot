@@ -197,10 +197,10 @@ async def ban(ctx, user: discord.Member, *, reason=None):
 async def wikipedia(ctx, *, query):
     print(f"Command invoked by: {ctx.author.name} ({ctx.author.id})")
 
-    # Set a custom user agent
-    user_agent = 'Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/58.0.3029.110 Safari/537.3'
+    # Set a custom user agent in the headers
+    headers = {'User-Agent': 'Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/58.0.3029.110 Safari/537.3'}
     wiki_wiki = wikipediaapi.Wikipedia('en')
-    wiki_wiki.headers = {'User-Agent': user_agent}
+    wiki_wiki.headers = headers
 
     page_py = wiki_wiki.page(query)
     if page_py.exists():
