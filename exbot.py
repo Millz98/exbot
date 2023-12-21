@@ -1,5 +1,6 @@
 import discord
 import os
+import random
 from discord.ext import commands
 from dotenv import load_dotenv
 
@@ -80,9 +81,105 @@ async def ping(ctx):
 async def info(ctx):
     print(f"Command invoked by: {ctx.author.name} ({ctx.author.id})")
     embed = discord.Embed(title="Bot Information", color=0x00ff00)
-    embed.add_field(name="Creator", value="Millz98", inline=False)
-    embed.add_field(name="Version", value="0.1", inline=False)
+    embed.add_field(name="Creator", value="Your Name", inline=False)
+    embed.add_field(name="Version", value="1.0", inline=False)
     await ctx.send(embed=embed)
+
+
+# Command: Roll
+@bot.command(name='roll')
+async def roll(ctx, dice: str):
+    print(f"Command invoked by: {ctx.author.name} ({ctx.author.id})")
+
+    try:
+        rolls, limit = map(int, dice.split('d'))
+    except Exception as e:
+        await ctx.send("Invalid dice format. Use the format `!roll NdM`, e.g., `!roll 2d6`.")
+        return
+
+    result = ', '.join(str(random.randint(1, limit)) for _ in range(rolls))
+    await ctx.send(f'Rolls: {result}')
+
+
+# Command: 8ball
+@bot.command(name='8ball')
+async def eight_ball(ctx, *, question: str):
+    print(f"Command invoked by: {ctx.author.name} ({ctx.author.id})")
+
+    responses = [
+        "Yes",
+        "No",
+        "Maybe",
+        "Ask again later",
+        "Cannot predict now",
+        "Don't count on it",
+        "Outlook not so good",
+        "Certainly not",
+    ]
+    response = random.choice(responses)
+    await ctx.send(f'Question: {question}\nAnswer: {response}')
+
+# Command: Server Info
+@bot.command(name='serverinfo')
+async def serverinfo(ctx):
+    print(f"Command invoked by: {ctx.author.name} ({ctx.author.id})")
+
+    guild = ctx.guild
+    embed = discord.Embed(title=f"Server Information - {guild.name}", color=0x00ff00)
+    embed.add_field(name="Server ID", value=guild.id, inline=False)
+    embed.add_field(name="Members", value=guild.member_count, inline=False)
+    embed.add_field(name="Creation Date", value=guild.created_at.strftime('%Y-%m-%d %H:%M:%S'), inline=False)
+    embed.set_thumbnail(url=guild.icon_url)
+    await ctx.send(embed=embed)
+
+
+# Command: User Info
+@bot.command(name='userinfo')
+async def userinfo(ctx, user: discord.Member = None):
+    print(f"Command invoked by: {ctx.author.name} ({ctx.author.id})")
+
+    user = user or ctx.author
+    embed = discord.Embed(title=f"User Information - {user.name}", color=0x00ff00)
+    embed.add_field(name="User ID", value=user.id, inline=False)
+    embed.add_field(name="Nickname", value=user.nick, inline=False)
+    embed.add_field(name="Roles", value=", ".join(role.name for role in user.roles), inline=False)
+    embed.add_field(name="Joined Server", value=user.joined_at.strftime('%Y-%m-%d %H:%M:%S'), inline=False)
+    embed.add_field(name="Account Created", value=user.created_at.strftime('%Y-%m-%d %H:%M:%S'), inline=False)
+    embed.set_thumbnail(url=user.avatar_url)
+    await ctx.send(embed=embed)
+
+
+# Command: Avatar
+@bot.command(name='avatar')
+async def avatar(ctx, user: discord.Member = None):
+    print(f"Command invoked by: {ctx.author.name} ({ctx.author.id})")
+
+    user = user or ctx.author
+    await ctx.send(f"Avatar of {user.name}: {user.avatar_url}")
+
+
+# Command: Kick
+@bot.command(name='kick')
+async def kick(ctx, user: discord.Member, *, reason=None):
+    print(f"Command invoked by: {ctx.author.name} ({ctx.author.id})")
+
+    if ctx.author.guild_permissions.kick_members:
+        await user.kick(reason=reason)
+        await ctx.send(f"{user.name} has been kicked.")
+    else:
+        await ctx.send("You don't have permission to kick members.")
+
+
+# Command: Ban
+@bot.command(name='ban')
+async def ban(ctx, user: discord.Member, *, reason=None):
+    print(f"Command invoked by: {ctx.author.name} ({ctx.author.id})")
+
+    if ctx.author.guild_permissions.ban_members:
+        await user.ban(reason=reason)
+        await ctx.send(f"{user.name} has been banned.")
+    else:
+        await ctx.send("You don't have permission to ban members.")
 
 
 # Event: Process Commands
