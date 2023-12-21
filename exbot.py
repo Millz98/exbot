@@ -199,7 +199,8 @@ async def wikipedia(ctx, *, query):
 
     # Set a custom user agent
     user_agent = 'Exeter/0.1 (Discord Bot; project6six@gmail.com)'
-    wiki_wiki = wikipediaapi.Wikipedia('en', user_agent=user_agent)
+    wiki_wiki = wikipediaapi.Wikipedia('en')
+    wiki_wiki.user_agent = user_agent
 
     page_py = wiki_wiki.page(query)
     if page_py.exists():
