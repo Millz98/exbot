@@ -22,6 +22,37 @@ async def on_ready():
     print(f'Logged in as {bot.user.name} ({bot.user.id})')
 
 
+# Event: Greet new members
+@bot.event
+async def on_member_join(member):
+    print(f'New member joined: {member.name} ({member.id})')
+
+    # Send a welcome message
+    welcome_channel = member.guild.system_channel  # You can customize this to the channel you want
+    if welcome_channel:
+        await welcome_channel.send(f'Welcome, {member.mention}!')
+
+
+# Event: Member leaves
+@bot.event
+async def on_member_remove(member):
+    print(f'Member left: {member.name} ({member.id})')
+
+    # Perform actions when a member leaves
+
+
+# Event: Member status update
+@bot.event
+async def on_member_update(before, after):
+    if before.status != after.status and after.status == discord.Status.online:
+        print(f'Member {after.name} ({after.id}) came online after being offline.')
+
+        # Send a welcome back message
+        welcome_channel = after.guild.system_channel  # You can customize this to the channel you want
+        if welcome_channel:
+            await welcome_channel.send(f'Welcome back, {after.mention}!')
+
+
 # Command: Hello
 @bot.command(name='hello')
 async def hello(ctx):
