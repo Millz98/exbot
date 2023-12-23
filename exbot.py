@@ -4,7 +4,6 @@ import random
 from discord.ext import commands
 from dotenv import load_dotenv
 
-
 load_dotenv()  # Load environment variables from .env file
 
 DISCORD_BOT_TOKEN = os.getenv("DISCORD_BOT_TOKEN")
@@ -17,7 +16,6 @@ intents.members = True  # Enable the members intent
 intents.message_content = True  # Enable message content intent
 
 bot = commands.Bot(command_prefix='!', intents=intents)
-
 
 
 # Event: Bot is ready
@@ -96,7 +94,7 @@ async def roll(ctx, dice: str):
 
     try:
         rolls, limit = map(int, dice.split('d'))
-    except Exception as e:
+    except Exception:
         await ctx.send("Invalid dice format. Use the format `!roll NdM`, e.g., `!roll 2d6`.")
         return
 
@@ -122,6 +120,7 @@ async def eight_ball(ctx, *, question: str):
     response = random.choice(responses)
     await ctx.send(f'Question: {question}\nAnswer: {response}')
 
+
 # Command: Server Info
 @bot.command(name='serverinfo')
 async def serverinfo(ctx):
@@ -132,12 +131,11 @@ async def serverinfo(ctx):
     embed.add_field(name="Server ID", value=guild.id, inline=False)
     embed.add_field(name="Members", value=guild.member_count, inline=False)
     embed.add_field(name="Creation Date", value=guild.created_at.strftime('%Y-%m-%d %H:%M:%S'), inline=False)
-    
+
     # Use icon.url instead of icon_url
     embed.set_thumbnail(url=guild.icon.url)
-    
-    await ctx.send(embed=embed)
 
+    await ctx.send(embed=embed)
 
 
 # Command: User Info
@@ -152,12 +150,11 @@ async def userinfo(ctx, user: discord.Member = None):
     embed.add_field(name="Roles", value=", ".join(role.name for role in user.roles), inline=False)
     embed.add_field(name="Joined Server", value=user.joined_at.strftime('%Y-%m-%d %H:%M:%S'), inline=False)
     embed.add_field(name="Account Created", value=user.created_at.strftime('%Y-%m-%d %H:%M:%S'), inline=False)
-    
+
     # Use avatar.url instead of avatar_url
     embed.set_thumbnail(url=user.avatar.url)
-    
-    await ctx.send(embed=embed)
 
+    await ctx.send(embed=embed)
 
 
 # Command: Avatar
@@ -191,7 +188,8 @@ async def ban(ctx, user: discord.Member, *, reason=None):
         await ctx.send(f"{user.name} has been banned.")
     else:
         await ctx.send("You don't have permission to ban members.")
-        
+
+
 # Event: Process Commands
 @bot.event
 async def on_message(message):
